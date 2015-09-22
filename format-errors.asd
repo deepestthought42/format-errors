@@ -6,7 +6,8 @@
   :license "Specify license here"
   :depends-on (#:iterate
                #:alexandria
-               #:let-plus)
+		#:let-plus
+		#:split-sequence)
   :serial t
   :components ((:file "package")
                (:file "format-errors")))
