@@ -7,6 +7,8 @@
 (defvar *base* 10)
 (defvar *separator-indicator* '-)
 (defvar *separator-character* #\.)
+(defvar *error-delimiters* '("(" ")"))
+(defvar *sum-error-delimiters* '("{" "}"))
 
 (defclass number-details ()
   ((value :accessor value :initarg :value
@@ -70,9 +72,11 @@
 	    digits<one <one
 	    digits>one >one))))
 
+(defun sqrt-sum (lst)
+  (sqrt (reduce #'+ (mapcar #'(lambda (v) (* v v)) lst))))
 
-
-(defun format-errors (value errors &key (stream nil) (default-error-digits 2))
+(defun format-errors (value errors
+		      &key (stream nil) (default-error-digits 2))
   (labels ((conc-detail (detail &optional only-last-no-digits)
 	     (with-slots (digits digits<one)
 		 detail
@@ -89,7 +93,9 @@
 		 (format nil "~{~a~}" (substitute *separator-character*
 						  *separator-indicator*
 						  digits-to-print))))))
-    (let+ ((max-error-magn (reduce #'max errors :key #'%get-order-of-magnitude))
+    (let+ ((sqrt-sum (sqrt-sum errors))
+	   (max-error-magn (reduce #'max (append (list sqrt-sum) errors)
+				   :key #'%get-order-of-magnitude))
 	   (.down-to (- max-error-magn default-error-digits))
 	   (down-to (if (<= .down-to 0)
 			(1+ .down-to) .down-to))
@@ -100,13 +106,22 @@
 				      (make-instance 'number-details
 						     :value e
 						     :down-to-order-of-magnitude down-to))
-				  errors)))
+				  errors))
+	   (sum-sqr-detail (make-instance 'number-details
+					  :value sqrt-sum
+					  :down-to-order-of-magnitude down-to))
+	   (no-error-digits (max (1+ max-error-magn)
+				 default-error-digits)))
       (format stream
-	      "~a~{(~a)~}"
+	      (format nil "~~a~~{~a~~a~a~~}~a~~a~a"
+		      (first *error-delimiters*)
+		      (second *error-delimiters*)
+		      (first *sum-error-delimiters*)
+		      (second *sum-error-delimiters*))
 	      (conc-detail value-detail)
-	      (mapcar #'(lambda (d) (conc-detail d (max (1+ max-error-magn)
-						   default-error-digits)))
-		      errors-detail)))))
+	      (mapcar #'(lambda (d) (conc-detail d no-error-digits))
+		      errors-detail)
+	      (conc-detail sum-sqr-detail no-error-digits)))))
 
 
 
