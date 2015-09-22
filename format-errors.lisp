@@ -112,16 +112,24 @@
 					  :down-to-order-of-magnitude down-to))
 	   (no-error-digits (max (1+ max-error-magn)
 				 default-error-digits)))
-      (format stream
-	      (format nil "~~a~~{~a~~a~a~~}~a~~a~a"
-		      (first *error-delimiters*)
-		      (second *error-delimiters*)
-		      (first *sum-error-delimiters*)
-		      (second *sum-error-delimiters*))
-	      (conc-detail value-detail)
-	      (mapcar #'(lambda (d) (conc-detail d no-error-digits))
-		      errors-detail)
-	      (conc-detail sum-sqr-detail no-error-digits)))))
+      (if (> (length errors) 1)
+	  (format stream
+	       (format nil "~~a~~{~a~~a~a~~}~a~~a~a"
+		       (first *error-delimiters*)
+		       (second *error-delimiters*)
+		       (first *sum-error-delimiters*)
+		       (second *sum-error-delimiters*))
+	       (conc-detail value-detail)
+	       (mapcar #'(lambda (d) (conc-detail d no-error-digits))
+		       errors-detail)
+	       (conc-detail sum-sqr-detail no-error-digits))
+	  (format stream
+	       (format nil "~~a~~{~a~~a~a~~}"
+		       (first *error-delimiters*)
+		       (second *error-delimiters*))
+	       (conc-detail value-detail)
+	       (mapcar #'(lambda (d) (conc-detail d no-error-digits))
+		       errors-detail))))))
 
 
 

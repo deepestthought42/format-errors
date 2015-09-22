@@ -7,9 +7,10 @@
 
 (in-package :format-errors-test)
 
-(plan 11)
+(plan 12)
 
 (is (format-errors 3.1 '(0.21 0.03)) "3.10(21)(03){21}")
+(is (format-errors 3.1 '(0.21)) "3.10(21)")
 (is (format-errors 3.1 '(0.21 0.21)) "3.10(21)(21){30}")
 (is (format-errors 3.1 '(0.9 0.9)) "3.1(0.9)(0.9){1.3}")
 (is (format-errors 1.0012 '(0.0099 0.0079)) "1.001(10)(08){13}")
