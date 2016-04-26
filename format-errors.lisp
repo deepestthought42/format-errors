@@ -24,10 +24,15 @@
 
 
 (defun %get-order-of-magnitude (value)
-  (floor (log value *base*)))
+  (if (= 0 value)
+      -1
+      (floor (log value *base*))))
+
 
 (defun %get-sign (value)
-  (/ value (abs value)))
+  (if (= 0d0 value)
+      1d0
+      (/ value (abs value))))
 
 (defun %split-digits (digits)
   (let ((split (split-sequence:split-sequence *separator-indicator* digits)))
