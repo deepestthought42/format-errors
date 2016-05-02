@@ -4,11 +4,30 @@
 
 ;;; "format-errors" goes here. Hacks and glory await!
 
-(defvar *base* 10)
-(defvar *separator-indicator* '-)
-(defvar *separator-character* #\.)
-(defvar *error-delimiters* '("(" ")"))
-(defvar *sum-error-delimiters* '("{" "}"))
+;; internal definitions
+
+(defvar *base* 10
+  "Internal use only as basis of log to calculate
+error digits. If you change this, things will break")
+
+(defvar *internal-separator-indicator* '-
+  "Internal use only. Indicates seperator position in list of digits.")
+
+
+
+;; definitions that can be rebound
+
+(defvar *decimal-mark* #\.
+  "Character used to indicate decimal mark in number. Defaults to '.'")
+
+(defvar *error-delimiters* "()"
+  "Delimiters used to indicate individual errors ")
+
+(defvar *sum-error-delimiters* "{}"
+  "Delimiters used to indicate square root of the sum of the squares of the errors.")
+
+
+;;;; helper class used to keep things in order
 
 (defclass number-details ()
   ((value :accessor value :initarg :value
@@ -35,7 +54,7 @@
       (/ value (abs value))))
 
 (defun %split-digits (digits)
-  (let ((split (split-sequence:split-sequence *separator-indicator* digits)))
+  (let ((split (split-sequence:split-sequence *internal-separator-indicator* digits)))
     (values (first split) (second split))))
 
 (defun %get-digits (value down-to)
@@ -52,7 +71,7 @@
 	((< i down-to)
 	 (collect 0 into digits))
 	((= -1 i)
-	 (collect *separator-indicator* into digits)
+	 (collect *internal-separator-indicator* into digits)
 	 (collect digit into digits))
 	(t
 	 (collect digit into digits)))
@@ -80,13 +99,36 @@
 (defun sqrt-sum (lst)
   (sqrt (reduce #'+ (mapcar #'(lambda (v) (* v v)) lst))))
 
+
 (defun format-errors (value errors
 		      &key (stream nil) (default-error-digits 2))
+  "Given a value in VALUE and a simple list of errors in ERRORS,
+FORMAT-ERRORS prints the value, list of errors, and the square root of
+the sum of the squares of the errors in delimiters (as defined by
+*ERROR-DELIMITERS* and *SUB-ERROR-DELIMITERS*) into STREAM (defaults
+to nil) with DEFAUL-ERROR-DIGITS (defaults to 2) number of digits. 
+
+Some examples:
+
+(format-errors 3.1 '(0.21 0.03)) => 3.10(21)(03){21}
+(format-errors 3.1 '(0.21)) => 3.10(21)
+(format-errors 3.1 '(0.21 0.21)) => 3.10(21)(21){30}
+(format-errors 3.1 '(0.9 0.9)) => 3.1(0.9)(0.9){1.3}
+(format-errors 1.0012 '(0.0099 0.0079)) => 1.001(10)(08){13}
+(format-errors 1.001 '(0.021 0.0003)) => 1.001(21)(00){21}
+(format-errors 1.001 '(0.021 0.0003) :default-error-digits 3) => 1.0010(210)(003){210}
+(format-errors 1.001 '(0.021 0.003)) => 1.001(21)(03){21}
+(format-errors 30.15 '(3.1 0.3)) => 30.1(3.1)(0.3){3.1}
+(format-errors 0 '(0.3 0.4)) => 0.00(30)(40){50}
+(format-errors 30000.15 '(314 3001)) => 30000(310)(3000){3020}
+(format-errors 30000.15 '(315 3001)) => 30000(320)(3000){3020}
+(format-errors 30000.15 '(315 3051)) => 30000(320)(3050){3070}
+"
   (labels ((conc-detail (detail &optional only-last-no-digits)
 	     (with-slots (digits digits<one)
 		 detail
 	       (let+ ((has-separator (and
-				      (find *separator-indicator* digits)
+				      (find *internal-separator-indicator* digits)
 				      only-last-no-digits
 				      (< (length digits<one) only-last-no-digits)))
 		      (digits-to-print
@@ -95,8 +137,8 @@
 						    (+ only-last-no-digits
 						       (if has-separator 1 0)))))
 			   digits)))
-		 (format nil "~{~a~}" (substitute *separator-character*
-						  *separator-indicator*
+		 (format nil "~{~a~}" (substitute *decimal-mark*
+						  *internal-separator-indicator*
 						  digits-to-print))))))
     (let+ ((sqrt-sum (sqrt-sum errors))
 	   (max-error-magn (reduce #'max (append (list sqrt-sum) errors)
@@ -120,18 +162,18 @@
       (if (> (length errors) 1)
 	  (format stream
 	       (format nil "~~a~~{~a~~a~a~~}~a~~a~a"
-		       (first *error-delimiters*)
-		       (second *error-delimiters*)
-		       (first *sum-error-delimiters*)
-		       (second *sum-error-delimiters*))
+		       (aref *error-delimiters* 0)
+		       (aref *error-delimiters* 1)
+		       (aref *sum-error-delimiters* 0)
+		       (aref *sum-error-delimiters* 1))
 	       (conc-detail value-detail)
 	       (mapcar #'(lambda (d) (conc-detail d no-error-digits))
 		       errors-detail)
 	       (conc-detail sum-sqr-detail no-error-digits))
 	  (format stream
 	       (format nil "~~a~~{~a~~a~a~~}"
-		       (first *error-delimiters*)
-		       (second *error-delimiters*))
+		       (aref *error-delimiters* 0)
+		       (aref *error-delimiters* 1))
 	       (conc-detail value-detail)
 	       (mapcar #'(lambda (d) (conc-detail d no-error-digits))
 		       errors-detail))))))

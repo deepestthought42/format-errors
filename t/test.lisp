@@ -7,7 +7,7 @@
 
 (in-package :format-errors-test)
 
-(plan 12)
+(plan 13)
 
 (is (format-errors 3.1 '(0.21 0.03)) "3.10(21)(03){21}")
 (is (format-errors 3.1 '(0.21)) "3.10(21)")
@@ -22,7 +22,6 @@
 (is (format-errors 30000.15 '(314 3001)) "30000(310)(3000){3020}")
 (is (format-errors 30000.15 '(315 3001)) "30000(320)(3000){3020}")
 (is (format-errors 30000.15 '(315 3051)) "30000(320)(3050){3070}")
-
 
 (finalize)
 
