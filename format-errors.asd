@@ -6,7 +6,7 @@
   in (physics). Example: 1.2(0.4)(0.3){0.5}"
   :author "Renee Klawitter <deepestthought42_at_gmail.com>"
   :version "1.0.0"
-  :license "MIT license (see README.org)"
+  :license "MIT license (see COPYING)"
   :depends-on (#:iterate
 	       #:alexandria
 	       #:let-plus

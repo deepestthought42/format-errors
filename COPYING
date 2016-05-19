@@ -1,33 +1,3 @@
-#+TITLE:	README for format-errors
-#+AUTHOR:	Renee Klawitter
-#+EMAIL:	deepestthought42{monkey}gmail.com
-#+DATE:		2016-05-03
-#+STARTUP:	content
-
-
-* What's this?
-A small Common Lisp library to output value and errors in a way that
-appeals to me and is used in the field I currently work in.
-
-
-* Documentation
-Usage should be as straightfoward as it gets. See documentation for details.
-#+BEGIN_SRC lisp :results silent
-(ql:quickload :format-errors)
-(with-open-file (stream "README.md" :direction :output
-                                    :if-exists :supersede)
-  (describe format-errors:@format-errors-manual stream))
-#+END_SRC
-
-
-
-* Release history 
-| version | comments               | date       |
-|---------+------------------------+------------|
-|   1.0.0 | initial public release | 2016/05/03 |
-
-
-* COPYING
 Copyright (c) 2016 R. Klawitter
 
 Permission is hereby granted, free of charge, to any person obtaining
@@ -48,5 +18,3 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
