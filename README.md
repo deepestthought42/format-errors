@@ -1,18 +1,25 @@
+<a id='x-28FORMAT-ERRORS-3A-40FORMAT-ERRORS-MANUAL-20MGL-PAX-3ASECTION-29'></a>
+
 # format-errors manual
+
+## Table of Contents
+
 
 ###### \[in package FORMAT-ERRORS\]
 A small Common Lisp library to output value and errors in a way that
 appeals to me and is used in the field I currently work in.
 
-- [function] FORMAT-ERRORS VALUE ERRORS &KEY (STREAM NIL) (DEFAULT-ERROR-DIGITS 2)
+<a id='x-28FORMAT-ERRORS-3AFORMAT-ERRORS-20FUNCTION-29'></a>
 
-    Given a value in VALUE and a simple list of errors in ERRORS,
-    FORMAT-ERRORS prints the value, list of errors, and the square root of
+- [function] **FORMAT-ERRORS** *VALUE ERRORS &KEY (STREAM NIL) (DEFAULT-ERROR-DIGITS 2)*
+
+    Given a value in `VALUE` and a simple list of errors in `ERRORS`,
+    [`FORMAT-ERRORS`][6866] prints the value, list of errors, and the square root of
     the sum of the squares of the errors in delimiters (as defined by
-    *ERROR-DELIMITERS* and *SUB-ERROR-DELIMITERS*) into STREAM (defaults
+    [`*ERROR-DELIMITERS*`][2fc5] and *SUB-ERROR-DELIMITERS*) into `STREAM` (defaults
     to nil) with DEFAUL-ERROR-DIGITS (defaults to 2) number of digits. 
     Some examples:
-    `
+    `lisp
     (format-errors 3.1 '(0.21 0.03)) => 3.10(21)(03){21}
     (format-errors 3.1 '(0.21)) => 3.10(21)
     (format-errors 3.1 '(0.21 0.21)) => 3.10(21)(21){30}
@@ -28,11 +35,23 @@ appeals to me and is used in the field I currently work in.
     (format-errors 30000.15 '(315 3051)) => 30000(320)(3050){3070}
     `
 
-- [variable] *BASE* 10
+<a id='x-28FORMAT-ERRORS-3A-2ADECIMAL-MARK-2A-20-28VARIABLE-29-29'></a>
 
-    Internal use only as basis of log to calculate
-    error digits. If you change this, things will break
+- [variable] **\*DECIMAL-MARK\*** *#\.*
 
-- [variable] *INTERNAL-SEPARATOR-INDICATOR* -
+    Character used to indicate decimal mark in number. Defaults to '.'
 
-    Internal use only. Indicates seperator position in list of digits.
+<a id='x-28FORMAT-ERRORS-3A-2AERROR-DELIMITERS-2A-20-28VARIABLE-29-29'></a>
+
+- [variable] **\*ERROR-DELIMITERS\*** *"()"*
+
+    Delimiters used to indicate individual errors 
+
+<a id='x-28FORMAT-ERRORS-3A-2ASUM-ERROR-DELIMITERS-2A-20-28VARIABLE-29-29'></a>
+
+- [variable] **\*SUM-ERROR-DELIMITERS\*** *"{}"*
+
+    Delimiters used to indicate square root of the sum of the squares of the errors.
+
+  [2fc5]: #x-28FORMAT-ERRORS-3A-2AERROR-DELIMITERS-2A-20-28VARIABLE-29-29 "(FORMAT-ERRORS:*ERROR-DELIMITERS* (VARIABLE))"
+  [6866]: #x-28FORMAT-ERRORS-3AFORMAT-ERRORS-20FUNCTION-29 "(FORMAT-ERRORS:FORMAT-ERRORS FUNCTION)"

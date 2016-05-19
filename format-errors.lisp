@@ -5,14 +5,16 @@
 ;;; "format-errors" goes here. Hacks and glory await!
 
 ;; internal definitions
-
+(setf 3bmd-code-blocks:*code-blocks* t)
 
 (defsection @format-errors-manual (:title "format-errors manual")
   "A small Common Lisp library to output value and errors in a way that
 appeals to me and is used in the field I currently work in."
   (format-errors function)
-  (*base* variable)
-  (*internal-separator-indicator* variable))
+  (*decimal-mark* variable)
+  (*error-delimiters* variable)
+  (*sum-error-delimiters* variable))
+
 
 
 (defvar *base* 10
@@ -117,7 +119,7 @@ the sum of the squares of the errors in delimiters (as defined by
 *ERROR-DELIMITERS* and *SUB-ERROR-DELIMITERS*) into STREAM (defaults
 to nil) with DEFAUL-ERROR-DIGITS (defaults to 2) number of digits. 
 Some examples:
-```
+```lisp
 (format-errors 3.1 '(0.21 0.03)) => 3.10(21)(03){21}
 (format-errors 3.1 '(0.21)) => 3.10(21)
 (format-errors 3.1 '(0.21 0.21)) => 3.10(21)(21){30}

@@ -16,7 +16,7 @@ Usage should be as straightfoward as it gets. See documentation for details.
 (ql:quickload :format-errors)
 (with-open-file (stream "README.md" :direction :output
                                     :if-exists :supersede)
-  (describe format-errors:@format-errors-manual stream))
+  (mgl-pax:document format-errors:@format-errors-manual :stream stream :format :markdown))
 #+END_SRC
 
 
