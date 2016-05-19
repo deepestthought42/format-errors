@@ -6,6 +6,15 @@
 
 ;; internal definitions
 
+
+(defsection @format-errors-manual (:title "format-errors manual")
+  "A small Common Lisp library to output value and errors in a way that
+appeals to me and is used in the field I currently work in."
+  (format-errors function)
+  (*base* variable)
+  (*internal-separator-indicator* variable))
+
+
 (defvar *base* 10
   "Internal use only as basis of log to calculate
 error digits. If you change this, things will break")
@@ -107,9 +116,8 @@ FORMAT-ERRORS prints the value, list of errors, and the square root of
 the sum of the squares of the errors in delimiters (as defined by
 *ERROR-DELIMITERS* and *SUB-ERROR-DELIMITERS*) into STREAM (defaults
 to nil) with DEFAUL-ERROR-DIGITS (defaults to 2) number of digits. 
-
 Some examples:
-
+```
 (format-errors 3.1 '(0.21 0.03)) => 3.10(21)(03){21}
 (format-errors 3.1 '(0.21)) => 3.10(21)
 (format-errors 3.1 '(0.21 0.21)) => 3.10(21)(21){30}
@@ -123,7 +131,7 @@ Some examples:
 (format-errors 30000.15 '(314 3001)) => 30000(310)(3000){3020}
 (format-errors 30000.15 '(315 3001)) => 30000(320)(3000){3020}
 (format-errors 30000.15 '(315 3051)) => 30000(320)(3050){3070}
-"
+```"
   (labels ((conc-detail (detail &optional only-last-no-digits)
 	     (with-slots (digits digits<one)
 		 detail
