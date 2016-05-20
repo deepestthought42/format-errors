@@ -16,10 +16,10 @@ appeals to me and is used in the field I currently work in.
     Given a value in `VALUE` and a simple list of errors in `ERRORS`,
     [`FORMAT-ERRORS`][6866] prints the value, list of errors, and the square root of
     the sum of the squares of the errors in delimiters (as defined by
-    [`*ERROR-DELIMITERS*`][2fc5] and *SUB-ERROR-DELIMITERS*) into `STREAM` (defaults
+    [`*ERROR-DELIMITERS*`][2fc5] and [`*SUM-ERROR-DELIMITERS*`][6989]) into `STREAM` (defaults
     to nil) with DEFAUL-ERROR-DIGITS (defaults to 2) number of digits. 
     Some examples:
-    ```lisp
+    ```common-lisp
     (format-errors 3.1 '(0.21 0.03)) => 3.10(21)(03){21}
     (format-errors 3.1 '(0.21)) => 3.10(21)
     (format-errors 3.1 '(0.21 0.21)) => 3.10(21)(21){30}
@@ -55,3 +55,4 @@ appeals to me and is used in the field I currently work in.
 
   [2fc5]: #x-28FORMAT-ERRORS-3A-2AERROR-DELIMITERS-2A-20-28VARIABLE-29-29 "(FORMAT-ERRORS:*ERROR-DELIMITERS* (VARIABLE))"
   [6866]: #x-28FORMAT-ERRORS-3AFORMAT-ERRORS-20FUNCTION-29 "(FORMAT-ERRORS:FORMAT-ERRORS FUNCTION)"
+  [6989]: #x-28FORMAT-ERRORS-3A-2ASUM-ERROR-DELIMITERS-2A-20-28VARIABLE-29-29 "(FORMAT-ERRORS:*SUM-ERROR-DELIMITERS* (VARIABLE))"

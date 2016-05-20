@@ -116,7 +116,7 @@ error digits. If you change this, things will break")
   "Given a value in VALUE and a simple list of errors in ERRORS,
 FORMAT-ERRORS prints the value, list of errors, and the square root of
 the sum of the squares of the errors in delimiters (as defined by
-*ERROR-DELIMITERS* and *SUB-ERROR-DELIMITERS*) into STREAM (defaults
+*ERROR-DELIMITERS* and *SUM-ERROR-DELIMITERS*) into STREAM (defaults
 to nil) with DEFAUL-ERROR-DIGITS (defaults to 2) number of digits. 
 Some examples:
 ```
