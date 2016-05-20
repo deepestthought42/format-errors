@@ -19,7 +19,7 @@ appeals to me and is used in the field I currently work in.
     [`*ERROR-DELIMITERS*`][2fc5] and *SUB-ERROR-DELIMITERS*) into `STREAM` (defaults
     to nil) with DEFAUL-ERROR-DIGITS (defaults to 2) number of digits. 
     Some examples:
-    `lisp
+    ```lisp
     (format-errors 3.1 '(0.21 0.03)) => 3.10(21)(03){21}
     (format-errors 3.1 '(0.21)) => 3.10(21)
     (format-errors 3.1 '(0.21 0.21)) => 3.10(21)(21){30}
@@ -33,7 +33,7 @@ appeals to me and is used in the field I currently work in.
     (format-errors 30000.15 '(314 3001)) => 30000(310)(3000){3020}
     (format-errors 30000.15 '(315 3001)) => 30000(320)(3000){3020}
     (format-errors 30000.15 '(315 3051)) => 30000(320)(3050){3070}
-    `
+    ```
 
 <a id='x-28FORMAT-ERRORS-3A-2ADECIMAL-MARK-2A-20-28VARIABLE-29-29'></a>
 
@@ -45,7 +45,7 @@ appeals to me and is used in the field I currently work in.
 
 - [variable] **\*ERROR-DELIMITERS\*** *"()"*
 
-    Delimiters used to indicate individual errors 
+    Delimiters used to indicate individual errors.
 
 <a id='x-28FORMAT-ERRORS-3A-2ASUM-ERROR-DELIMITERS-2A-20-28VARIABLE-29-29'></a>
 

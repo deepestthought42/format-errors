@@ -19,12 +19,14 @@ Usage should be as straightfoward as it gets. See documentation for details.
   (mgl-pax:document format-errors:@format-errors-manual :stream stream :format :markdown))
 #+END_SRC
 
-
-
+* todos
+** TODO fix mgl-pax stuff
+the exported documentation (markdown) needs some fixing by hand at the
+moment.
 * Release history 
 | version | comments               | date       |
 |---------+------------------------+------------|
-|   1.0.0 | initial public release | 2016/05/03 |
+|   1.0.0 | initial public release | 2016/05/19 |
 
 
 * COPYING

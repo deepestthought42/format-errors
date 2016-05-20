@@ -32,7 +32,7 @@ error digits. If you change this, things will break")
   "Character used to indicate decimal mark in number. Defaults to '.'")
 
 (defvar *error-delimiters* "()"
-  "Delimiters used to indicate individual errors ")
+  "Delimiters used to indicate individual errors.")
 
 (defvar *sum-error-delimiters* "{}"
   "Delimiters used to indicate square root of the sum of the squares of the errors.")
@@ -119,7 +119,7 @@ the sum of the squares of the errors in delimiters (as defined by
 *ERROR-DELIMITERS* and *SUB-ERROR-DELIMITERS*) into STREAM (defaults
 to nil) with DEFAUL-ERROR-DIGITS (defaults to 2) number of digits. 
 Some examples:
-```lisp
+```
 (format-errors 3.1 '(0.21 0.03)) => 3.10(21)(03){21}
 (format-errors 3.1 '(0.21)) => 3.10(21)
 (format-errors 3.1 '(0.21 0.21)) => 3.10(21)(21){30}
@@ -133,7 +133,7 @@ Some examples:
 (format-errors 30000.15 '(314 3001)) => 30000(310)(3000){3020}
 (format-errors 30000.15 '(315 3001)) => 30000(320)(3000){3020}
 (format-errors 30000.15 '(315 3051)) => 30000(320)(3050){3070}
-```"
+```" 
   (labels ((conc-detail (detail &optional only-last-no-digits)
 	     (with-slots (digits digits<one)
 		 detail
@@ -192,5 +192,3 @@ Some examples:
 
 
 
-#+nil
-(prove:run #P"/home/renee/phd/src/lisp/format-errors/t/test.lisp")
