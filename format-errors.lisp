@@ -56,7 +56,7 @@ error digits. If you change this, things will break")
 (defun %get-order-of-magnitude (value)
   (if (= 0 value)
       -1
-      (floor (log value *base*))))
+      (floor (log (abs value) *base*))))
 
 
 (defun %get-sign (value)
@@ -113,7 +113,24 @@ error digits. If you change this, things will break")
 
 (defun format-errors (value errors
 		      &key (stream nil) (default-error-digits 2))
-  "Given a value in VALUE and a simple list of errors in ERRORS,
+ 
+  (labels ((conc-detail (detail &optional only-last-no-digits)
+	     (with-slots (digits digits<one)
+		 detail
+	       (let+ ((has-separator (and
+				      (find *internal-separator-indicator* digits)
+				      only-last-no-digits
+				      (< (length digits<one) only-last-no-digits)))
+		      (digits-to-print
+		       (if only-last-no-digits
+			   (subseq digits (max 0 (- (length digits)
+						    (+ only-last-no-digits
+						       (if has-separator 1 0)))))
+			   digits)))
+		 (format nil "~{~a~}" (substitute *decimal-mark*
+						  *internal-separator-indicator*
+						  digits-to-print))))))
+      "Given a value in VALUE and a simple list of errors in ERRORS,
 FORMAT-ERRORS prints the value, list of errors, and the square root of
 the sum of the squares of the errors in delimiters (as defined by
 *ERROR-DELIMITERS* and *SUM-ERROR-DELIMITERS*) into STREAM (defaults
@@ -133,24 +150,9 @@ Some examples:
 (format-errors 30000.15 '(314 3001)) => 30000(310)(3000){3020}
 (format-errors 30000.15 '(315 3001)) => 30000(320)(3000){3020}
 (format-errors 30000.15 '(315 3051)) => 30000(320)(3050){3070}
-```" 
-  (labels ((conc-detail (detail &optional only-last-no-digits)
-	     (with-slots (digits digits<one)
-		 detail
-	       (let+ ((has-separator (and
-				      (find *internal-separator-indicator* digits)
-				      only-last-no-digits
-				      (< (length digits<one) only-last-no-digits)))
-		      (digits-to-print
-		       (if only-last-no-digits
-			   (subseq digits (max 0 (- (length digits)
-						    (+ only-last-no-digits
-						       (if has-separator 1 0)))))
-			   digits)))
-		 (format nil "~{~a~}" (substitute *decimal-mark*
-						  *internal-separator-indicator*
-						  digits-to-print))))))
-    (let+ ((sqrt-sum (sqrt-sum errors))
+```"
+    (let+ ((errors (remove-if #'(lambda (e) (= e 0)) errors))
+	   (sqrt-sum (sqrt-sum errors))
 	   (max-error-magn (reduce #'max (append (list sqrt-sum) errors)
 				   :key #'%get-order-of-magnitude))
 	   (.down-to (- max-error-magn default-error-digits))
@@ -187,6 +189,7 @@ Some examples:
 	       (conc-detail value-detail)
 	       (mapcar #'(lambda (d) (conc-detail d no-error-digits))
 		       errors-detail))))))
+
 
 
 
